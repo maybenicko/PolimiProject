@@ -1,0 +1,39 @@
+{
+    "name": "Bart #1101",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "green"
+        },
+        {
+            "trait_type": "head",
+            "value": "skeleton"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "happy"
+        },
+        {
+            "trait_type": "body",
+            "value": "grey"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "hat",
+            "value": "green top hat"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "lollipop"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

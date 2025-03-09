@@ -1,0 +1,39 @@
+{
+    "name": "Bart #1046",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "orange"
+        },
+        {
+            "trait_type": "head",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "amazed"
+        },
+        {
+            "trait_type": "body",
+            "value": "red"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "hat",
+            "value": "sombrero"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "none"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

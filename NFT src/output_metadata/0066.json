@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0066",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "purple"
+        },
+        {
+            "trait_type": "head",
+            "value": "alien"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "happy"
+        },
+        {
+            "trait_type": "body",
+            "value": "blue smoking"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "normal"
+        },
+        {
+            "trait_type": "hat",
+            "value": "pirate bandana"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "cigarette"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

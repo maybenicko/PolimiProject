@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0015",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "red"
+        },
+        {
+            "trait_type": "head",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "high"
+        },
+        {
+            "trait_type": "body",
+            "value": "grey"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "thug purple glasses"
+        },
+        {
+            "trait_type": "hat",
+            "value": "green beret"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "tongue"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

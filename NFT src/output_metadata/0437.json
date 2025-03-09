@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0437",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "green"
+        },
+        {
+            "trait_type": "head",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "happy"
+        },
+        {
+            "trait_type": "body",
+            "value": "purple"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "hat",
+            "value": "santa"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "lollipop"
+        },
+        {
+            "trait_type": "ears",
+            "value": "silver earrings"
+        }
+    ]
+}

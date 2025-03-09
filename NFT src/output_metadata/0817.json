@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0817",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "purple"
+        },
+        {
+            "trait_type": "head",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "sad"
+        },
+        {
+            "trait_type": "body",
+            "value": "beige smoking"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "normal"
+        },
+        {
+            "trait_type": "hat",
+            "value": "cowboy grey"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "lollipop"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

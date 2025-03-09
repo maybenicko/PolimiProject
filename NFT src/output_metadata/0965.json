@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0965",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "green"
+        },
+        {
+            "trait_type": "head",
+            "value": "zombie"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "happy"
+        },
+        {
+            "trait_type": "body",
+            "value": "brown jacket"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "thug purple glasses"
+        },
+        {
+            "trait_type": "hat",
+            "value": "red beret"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "none"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

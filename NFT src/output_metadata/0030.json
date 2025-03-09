@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0030",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "head",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "high"
+        },
+        {
+            "trait_type": "body",
+            "value": "purple"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "high af"
+        },
+        {
+            "trait_type": "hat",
+            "value": "sombrero"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "tongue"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

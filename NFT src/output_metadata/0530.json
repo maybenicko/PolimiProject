@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0530",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "blue"
+        },
+        {
+            "trait_type": "head",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "high"
+        },
+        {
+            "trait_type": "body",
+            "value": "pirate vest"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "solana vipers"
+        },
+        {
+            "trait_type": "hat",
+            "value": "horns purple"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "tongue"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

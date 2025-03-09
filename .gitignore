@@ -1,0 +1,5 @@
+.idea/
+**/__pycache__/
+DB src/creds/creds.json
+*.db
+venv/

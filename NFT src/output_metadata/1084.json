@@ -1,0 +1,39 @@
+{
+    "name": "Bart #1084",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "head",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "happy"
+        },
+        {
+            "trait_type": "body",
+            "value": "blue jacket"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "normal"
+        },
+        {
+            "trait_type": "hat",
+            "value": "red beret"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "cigarette"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

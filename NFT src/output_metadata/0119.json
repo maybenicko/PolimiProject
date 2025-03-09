@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0119",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "green"
+        },
+        {
+            "trait_type": "head",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "sad"
+        },
+        {
+            "trait_type": "body",
+            "value": "military vest"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "3d glasses"
+        },
+        {
+            "trait_type": "hat",
+            "value": "horns purple"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "cigarette"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

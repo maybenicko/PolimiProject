@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0405",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "orange"
+        },
+        {
+            "trait_type": "head",
+            "value": "alien"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "sad"
+        },
+        {
+            "trait_type": "body",
+            "value": "blue smoking"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "normal"
+        },
+        {
+            "trait_type": "hat",
+            "value": "firefighter hat"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "tongue"
+        },
+        {
+            "trait_type": "ears",
+            "value": "none"
+        }
+    ]
+}

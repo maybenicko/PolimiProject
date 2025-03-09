@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0979",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "orange"
+        },
+        {
+            "trait_type": "head",
+            "value": "skeleton"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "high"
+        },
+        {
+            "trait_type": "body",
+            "value": "red"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "thug purple glasses"
+        },
+        {
+            "trait_type": "hat",
+            "value": "green top hat"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "lollipop"
+        },
+        {
+            "trait_type": "ears",
+            "value": "golden earrings"
+        }
+    ]
+}

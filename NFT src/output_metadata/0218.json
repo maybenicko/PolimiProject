@@ -1,0 +1,39 @@
+{
+    "name": "Bart #0218",
+    "description": "One of 20 Bart NFTs.",
+    "image": "ipfs://",
+    "attributes": [
+        {
+            "trait_type": "background",
+            "value": "blue"
+        },
+        {
+            "trait_type": "head",
+            "value": "yellow"
+        },
+        {
+            "trait_type": "mouth",
+            "value": "high"
+        },
+        {
+            "trait_type": "body",
+            "value": "brown"
+        },
+        {
+            "trait_type": "eyes",
+            "value": "red glasses"
+        },
+        {
+            "trait_type": "hat",
+            "value": "sombrero"
+        },
+        {
+            "trait_type": "accessory",
+            "value": "tongue"
+        },
+        {
+            "trait_type": "ears",
+            "value": "golden earrings"
+        }
+    ]
+}
