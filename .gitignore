@@ -1,14 +1,7 @@
 .idea/
 **/__pycache__/
 DB src/creds/*
-!.gitignore
-DB src/DB/FILTER/*
-!.gitignore
-DB src/DB/POST/*
-!.gitignore
-DB src/DB/WORDS/*
-!.gitignore
 *.db
 venv/
-NFT src/output_images/*
-!.gitignore
+NFT src/output_images/*.png
+NFT src/output_metadata/*.json
