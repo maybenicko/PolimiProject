@@ -1,6 +1,9 @@
 .idea/
 **/__pycache__/
-DB src/creds/creds.json
+DB src/creds/*
+DB src/DB/FILTER/*
+DB src/DB/POST/*
+DB src/DB/WORDS/*
 *.db
 venv/
-NFT src/output_images/
+NFT src/output_images/*
