@@ -3,3 +3,4 @@
 DB src/creds/creds.json
 *.db
 venv/
+NFT src/output_images/
