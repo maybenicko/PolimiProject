@@ -1,5 +1,4 @@
 import time
-
 from dateutil.relativedelta import relativedelta
 import praw
 from datetime import datetime
@@ -98,6 +97,7 @@ class RedditMonitor:
 if __name__ == "__main__":
     reddit_monitor = RedditMonitor()
     while True:
+        delay = 1800
         reddit_monitor.fetch_posts()
-        time.sleep(1800)
-
+        print(f'[ SLEEPING FOR {delay}s... ]')
+        time.sleep(delay)
