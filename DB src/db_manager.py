@@ -1,6 +1,5 @@
 import sqlite3
 import re
-import nltk
 from nltk.corpus import stopwords
 
 
@@ -57,16 +56,17 @@ class SQLManager:
                                 score INTEGER,
                                 num_comments INTEGER,
                                 upvote_ratio REAL,
-                                date INTEGER,
+                                date TEXT,
+                                timestamp INTEGER,
                                 subreddit_name TEXT
                             )
                         ''')
             self.db_connection.commit()
             self.db_cursor.execute('''
-                            INSERT INTO post_data (title, score, num_comments, upvote_ratio, date, subreddit_name)
-                            VALUES (?, ?, ?, ?, ?, ?)
+                            INSERT INTO post_data (title, score, num_comments, upvote_ratio, date, timestamp, subreddit_name)
+                            VALUES (?, ?, ?, ?, ?, ?, ?)
                         ''', (self.data["title"], self.data["score"], self.data["num_comments"],
-                              self.data["upvote_ratio"], self.data["date"], self.data["subreddit_name"]))
+                              self.data["upvote_ratio"], self.data["date"], self.data["timestamp"], self.data["subreddit_name"]))
             self.db_connection.commit()
 
         elif self.subdirectory == 'WORDS/':
