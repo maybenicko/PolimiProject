@@ -6,3 +6,4 @@ venv/
 NFT src/output_images/*.png
 NFT src/output_metadata/*.json
 dist/
+build/
