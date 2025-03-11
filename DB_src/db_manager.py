@@ -1,6 +1,11 @@
 import sqlite3
 import re
 from nltk.corpus import stopwords
+import nltk
+
+
+# first time running you will have to:
+# nltk.download('stopwords')
 
 
 class SQLManager:

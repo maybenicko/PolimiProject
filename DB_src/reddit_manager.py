@@ -1,4 +1,3 @@
-import time
 from dateutil.relativedelta import relativedelta
 import praw
 from datetime import datetime
