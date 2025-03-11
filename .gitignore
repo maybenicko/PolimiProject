@@ -5,3 +5,4 @@ DB_src/creds/*
 venv/
 NFT src/output_images/*.png
 NFT src/output_metadata/*.json
+dist/
