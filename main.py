@@ -7,5 +7,5 @@ if __name__ == "__main__":
     while True:
         delay = 1800
         reddit_monitor.fetch_posts()
-        print(f'{reddit_monitor.get_time()} [ SLEEPING FOR {delay}s... ]')
+        print(f'[ SLEEPING FOR {delay}s... ]')
         time.sleep(delay)

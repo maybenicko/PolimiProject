@@ -2,6 +2,7 @@ import sqlite3
 import re
 from nltk.corpus import stopwords
 import nltk
+from datetime import datetime, timedelta
 
 
 # first time running you will have to:
@@ -14,7 +15,7 @@ class SQLManager:
         self.db_id = db_id
         self.post_id = post_id
         self.data = data
-        self.db_connection = sqlite3.connect(f'DB/{self.subdirectory}{self.db_id}.db')
+        self.db_connection = sqlite3.connect(f'DB_src/DB/{self.subdirectory}{self.db_id}.db')
         self.db_cursor = self.db_connection.cursor()
         self.initialize_filter_db()
 
@@ -58,6 +59,7 @@ class SQLManager:
                             CREATE TABLE IF NOT EXISTS post_data (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                                 title TEXT,
+                                description TEXT,
                                 score INTEGER,
                                 num_comments INTEGER,
                                 upvote_ratio REAL,
@@ -68,11 +70,12 @@ class SQLManager:
                         ''')
             self.db_connection.commit()
             self.db_cursor.execute('''
-                            INSERT INTO post_data (title, score, num_comments, upvote_ratio, date, timestamp, subreddit_name)
-                            VALUES (?, ?, ?, ?, ?, ?, ?)
-                        ''', (self.data["title"], self.data["score"], self.data["num_comments"],
+                            INSERT INTO post_data (title, description, score, num_comments, upvote_ratio, date, timestamp, subreddit_name)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                        ''', (self.data["title"], self.data["description"], self.data["score"], self.data["num_comments"],
                               self.data["upvote_ratio"], self.data["date"], self.data["timestamp"], self.data["subreddit_name"]))
             self.db_connection.commit()
+            self.remove_old_records()
 
         elif self.subdirectory == 'WORDS/':
             words_list_base = re.findall(r'\b\w+\b', self.data["title"].lower())
@@ -129,4 +132,19 @@ class SQLManager:
             for word in words_list_add_count:
                 self.db_cursor.execute('SELECT count FROM word_data WHERE word = ?', (word,))
             self.db_connection.commit()
+
+    def remove_old_records(self):
+        one_week_ago = datetime.now() - timedelta(weeks=1)
+        formatted_date = one_week_ago.strftime('%Y-%m-%d')
+
+        query = """
+            DELETE FROM post_data
+            WHERE date < ?
+            OR upvote_ratio < 0.8
+            OR num_comments < 40
+            OR score < 100
+        """
+
+        self.db_cursor.execute(query, (formatted_date,))
+        self.db_connection.commit()
 

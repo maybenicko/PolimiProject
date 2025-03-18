@@ -3,7 +3,7 @@ import praw
 from datetime import datetime
 import pytz
 import json
-from db_manager import SQLManager
+from DB_src.db_manager import SQLManager
 
 
 class RedditMonitor:
@@ -20,11 +20,11 @@ class RedditMonitor:
 
     @staticmethod
     def get_time():
-        return datetime.now().strftime("[ %Y-%m-%d ] [ %H:%M:%S ]")
+        return datetime.now().strftime("[ %H:%M:%S ]")
 
     def get_creds(self):
         try:
-            with open("creds/creds.json", "r", encoding="utf-8") as file:
+            with open("DB_src/creds/creds.json", "r", encoding="utf-8") as file:
                 j = json.load(file)
                 return [j["client_id"], j["client_secret"]]
         except (FileNotFoundError, json.JSONDecodeError):
@@ -34,7 +34,7 @@ class RedditMonitor:
 
     def load_subreddits(self):
         try:
-            with open("subreddits.json", "r", encoding="utf-8") as file:
+            with open("DB_src/subreddits.json", "r", encoding="utf-8") as file:
                 content = json.load(file)
                 return content
         except (FileNotFoundError, json.JSONDecodeError):
@@ -60,10 +60,10 @@ class RedditMonitor:
                     for submission in new_posts:
                         post_timestamp = datetime.fromtimestamp(submission.created_utc)
                         date_post = post_timestamp.strftime("%Y-%m-%d")
-                        timestamp_month = datetime.now() - relativedelta(months=1)
+                        timestamp_week = datetime.now() - relativedelta(weeks=1)
 
-                        if post_timestamp < timestamp_month:
-                            print(f'{self.get_time()} [ POSTS TOO OLD - STOPPING FETCHING ] [ {date_post} ]')
+                        if post_timestamp < timestamp_week:
+                            print(f'{self.get_time()} [ POSTS TOO OLD - STOPPING FETCHING ]')
                             fetch = False
                             break
 
@@ -74,6 +74,7 @@ class RedditMonitor:
 
                             data = {
                                 "title": submission.title,
+                                "description": submission.selftext,
                                 "score": submission.score,
                                 "num_comments": submission.num_comments,
                                 "upvote_ratio": submission.upvote_ratio,
@@ -81,9 +82,9 @@ class RedditMonitor:
                                 "date": date_post,
                                 "subreddit_name": sub_name
                             }
+                            print(f'{self.get_time()} [ ADDING {post_id} ]')
 
                             for subdirectory in self.subdirectories:
-                                print(f'{self.get_time()} [ ADDING {post_id} TO THE DATABASE ] [ {date_post} ]')
                                 SQLManager(db_id, post_id, subdirectory, data).update_db()
 
                         else:
