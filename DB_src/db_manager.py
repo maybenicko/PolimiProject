@@ -1,150 +1,172 @@
 import sqlite3
-import re
-from nltk.corpus import stopwords
-import nltk
+import time
 from datetime import datetime, timedelta
+from post_ranking import ranked
+from coin_options_db import MemecoinGenerator
 
 
-# first time running you will have to:
-# nltk.download('stopwords')
-
-
-class SQLManager:
-    def __init__(self, db_id, post_id, subdirectory, data=None):
-        self.subdirectory = subdirectory
-        self.db_id = db_id
-        self.post_id = post_id
+# data = (title, selftext, score, num_comments, upvote_ratio, date_post, sub_name)
+class DatabaseManagement:
+    def __init__(self, db_name, data=None, post_id=None):
+        self.db_name = db_name
+        self.directories = ['Crypto', 'Politics', 'Activity']
         self.data = data
-        self.db_connection = sqlite3.connect(f'DB_src/DB/{self.subdirectory}{self.db_id}.db')
-        self.db_cursor = self.db_connection.cursor()
-        self.initialize_filter_db()
-
-    @staticmethod
-    def filter_stopwords(words_list_base):
-        stop_words = set(stopwords.words('english'))
-        words_list = []
-
-        for word in words_list_base:
-            if len(word) < 3:
-                continue
-            if word not in stop_words:
-                words_list.append(word)
-        return words_list
-
-    def initialize_filter_db(self):
-        self.db_cursor.execute('''
-            CREATE TABLE IF NOT EXISTS posts (
-                post_id TEXT PRIMARY KEY
-            )
-        ''')
-        self.db_connection.commit()
-
-    def check_post_processed(self):
-        self.db_cursor.execute('SELECT 1 FROM posts WHERE post_id = ?', (self.post_id,))
-        result = self.db_cursor.fetchone()
-        return result is not None
-
-    def store_filter(self):
-        self.db_cursor = self.db_connection.cursor()
-        self.initialize_filter_db()
-        self.db_cursor.execute('INSERT OR REPLACE INTO posts (post_id) VALUES (?)', (self.post_id,))
-        self.db_connection.commit()
+        self.post_id = post_id
 
     def update_db(self):
-        if self.subdirectory is None:
-            print('Error subdirectory')
-            return
-        if self.subdirectory == 'POST/':
-            self.db_cursor.execute('''
-                            CREATE TABLE IF NOT EXISTS post_data (
-                                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                title TEXT,
-                                description TEXT,
-                                score INTEGER,
-                                num_comments INTEGER,
-                                upvote_ratio REAL,
-                                date TEXT,
-                                timestamp INTEGER,
-                                subreddit_name TEXT
-                            )
-                        ''')
-            self.db_connection.commit()
-            self.db_cursor.execute('''
-                            INSERT INTO post_data (title, description, score, num_comments, upvote_ratio, date, timestamp, subreddit_name)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-                        ''', (self.data["title"], self.data["description"], self.data["score"], self.data["num_comments"],
-                              self.data["upvote_ratio"], self.data["date"], self.data["timestamp"], self.data["subreddit_name"]))
-            self.db_connection.commit()
-            self.remove_old_records()
+        directory = 'DB_src/DB/' + self.db_name + '.db'
+        with sqlite3.connect(directory) as conn:
+            cursor = conn.cursor()
 
-        elif self.subdirectory == 'WORDS/':
-            words_list_base = re.findall(r'\b\w+\b', self.data["title"].lower())
+            cursor.execute('''
+                        CREATE TABLE IF NOT EXISTS post_data (
+                            post_id TEXT PRIMARY KEY,
+                            title TEXT,
+                            description TEXT,
+                            score INTEGER,
+                            num_comments INTEGER,
+                            upvote_ratio REAL,
+                            date TEXT,
+                            subreddit_name TEXT
+                        )
+                    ''')
+            conn.commit()
 
-            words_list = self.filter_stopwords(words_list_base)
+            cursor.execute("SELECT * FROM post_data WHERE post_id = ?", (self.post_id,))
+            post_data = cursor.fetchone()
 
-            words_set = list(set(words_list))
-            words_list_add_count = [word for word in words_set if word not in words_list]
+            if not post_data:
+                cursor.execute('''
+                                    INSERT INTO post_data (
+                                        post_id, title, description, score, num_comments, upvote_ratio, date, subreddit_name
+                                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                                ''', (self.post_id, *self.data))
+                conn.commit()
+                print(f'[ ADDED {self.post_id} ]')
+                return True
 
-            self.db_cursor.execute('''
-                            CREATE TABLE IF NOT EXISTS word_data (
-                                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                word TEXT UNIQUE,
-                                count INTEGER DEFAULT 0,
-                                score INTEGER DEFAULT 0,
-                                num_comments INTEGER DEFAULT 0,
-                                upvote_ratio INTEGER DEFAULT 0,
-                                post_count INTEGER DEFAULT 0
-                            )
-                        ''')
-            self.db_connection.commit()
+            current_post_id, current_title, current_description, current_score, \
+                current_num_comments, current_upvote_ratio, current_date, current_subreddit = post_data
 
-            # get the list of the set to change all data once
-            for word in words_set:
-                self.db_cursor.execute('SELECT count, score, num_comments, upvote_ratio, post_count FROM word_data WHERE word = ?', (word,))
-                result = self.db_cursor.fetchone()
+            if (current_score == self.data[2] and
+                    current_num_comments == self.data[3] and
+                    current_upvote_ratio == self.data[4]):
+                print(f'[ SKIPPING {self.post_id} ]')
+                return False
 
-                if result:
-                    count, score, num_comments, upvote_ratio, post_count = result
-                    self.db_cursor.execute('UPDATE word_data SET count = count + 1 WHERE word = ?', (word,))
-                    self.db_cursor.execute('UPDATE word_data SET post_count = post_count + 1 WHERE word = ?', (word,))
+            # update post data
+            cursor.execute('''
+                        UPDATE post_data
+                        SET title = ?, description = ?, score = ?, num_comments = ?, 
+                            upvote_ratio = ?, date = ?, subreddit_name = ?
+                        WHERE post_id = ?
+                    ''', self.data + (self.post_id,))
+            conn.commit()
 
-                    new_score = score + self.data['score']
-                    new_num_comments = num_comments + self.data['num_comments']
+            # delete bad posts
+            one_week_ago = datetime.now() - timedelta(weeks=1)
+            formatted_date = one_week_ago.strftime('%Y-%m-%d')
+            query = """
+                        DELETE FROM post_data
+                        WHERE date < ?
+                        OR upvote_ratio < 0.8
+                        OR num_comments < 40
+                        OR score < 100
+                    """
+            cursor.execute(query, (formatted_date,))
+            conn.commit()
+            print(f'[ MODIFIED {self.post_id} ]')
+            return True
 
-                    weight_old = post_count / (post_count + 1)
-                    weight_new = 1 - weight_old
-                    new_upvote_ratio = (upvote_ratio * weight_old) + (self.data["upvote_ratio"] * weight_new)
+    def generate_top(self):
+        for db_name in self.directories:
+            directory = 'DB/' + db_name + '.db'
+            with sqlite3.connect(directory) as conn:
+                cursor = conn.cursor()
 
-                    self.db_cursor.execute('''
-                                        UPDATE word_data SET score = ?, num_comments = ?, upvote_ratio = ?
-                                        WHERE word = ?
-                                    ''', (
-                        new_score, new_num_comments, new_upvote_ratio, word))
-                    self.db_connection.commit()
-                else:
-                    # Insert new word with default values
-                    self.db_cursor.execute('''
-                                INSERT INTO word_data (word, count, score, num_comments, upvote_ratio, post_count)
-                                VALUES (?, 1, ?, ?, ?, 1)
-                            ''', (word, self.data['score'], self.data['num_comments'], self.data['upvote_ratio']))
-                    self.db_connection.commit()
+                query = """
+                    SELECT * 
+                    FROM post_data
+                    ORDER BY score DESC
+                    LIMIT 100;
+                """
+                cursor.execute(query)
+                data_score = cursor.fetchall()
 
-            for word in words_list_add_count:
-                self.db_cursor.execute('SELECT count FROM word_data WHERE word = ?', (word,))
-            self.db_connection.commit()
+                query = """
+                    SELECT * 
+                    FROM post_data
+                    ORDER BY num_comments DESC
+                    LIMIT 100;
+                """
+                cursor.execute(query)
+                data_comments = cursor.fetchall()
 
-    def remove_old_records(self):
-        one_week_ago = datetime.now() - timedelta(weeks=1)
-        formatted_date = one_week_ago.strftime('%Y-%m-%d')
+                query = """
+                    SELECT * 
+                    FROM post_data
+                    ORDER BY upvote_ratio DESC
+                    LIMIT 100;
+                """
+                cursor.execute(query)
+                data_upvote = cursor.fetchall()
+                top = ranked(data_score, data_comments, data_upvote)
+                self.check_top(top, db_name)
 
-        query = """
-            DELETE FROM post_data
-            WHERE date < ?
-            OR upvote_ratio < 0.8
-            OR num_comments < 40
-            OR score < 100
-        """
+    def check_top(self, top, db_name):
+        post_id_latest = []
+        for item_tuple in top:
+            post_id_latest.append(item_tuple[0])
 
-        self.db_cursor.execute(query, (formatted_date,))
-        self.db_connection.commit()
+        directory = 'DB/TOP/' + db_name + '.db'
 
+        post_id_old = []
+        with sqlite3.connect(directory) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT post_id FROM posts")
+            post_id_old = [row[0] for row in cursor.fetchall()]
+        conn.close()
+
+        # common to keep elements
+        keep_post_id = list(set(post_id_old) & set(post_id_latest))
+
+        # posts to keep as they are in db
+        add_post_id = []
+        for post in post_id_latest:
+            if post not in keep_post_id:
+                add_post_id.append(post)
+
+        # posts to remove from db
+        remove_post_id = []
+        for post in post_id_old:
+            if post not in keep_post_id:
+                remove_post_id.append(post)
+
+        directory = 'DB/TOP/' + db_name + '.db'
+        with sqlite3.connect(directory) as conn:
+            cursor = conn.cursor()
+
+            for post_id in add_post_id:
+
+                for item in top:
+                    if item[0] == post_id:
+                        desc = item[1] + '. ' + item[2]
+                        metadata = MemecoinGenerator(desc, item[7]).gen_metadata()
+                        continue
+
+                cursor.execute('''
+                    INSERT INTO posts (post_id, metadata) 
+                    VALUES (?, ?);
+                ''', (post_id, str(metadata)))
+                conn.commit()
+
+            for post_id in remove_post_id:
+                cursor.execute('''
+                        DELETE FROM posts 
+                        WHERE post_id = ?;
+                    ''', (post_id,))
+                conn.commit()
+
+
+bot = DatabaseManagement('')
+bot.generate_top()

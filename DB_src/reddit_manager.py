@@ -3,13 +3,12 @@ import praw
 from datetime import datetime
 import pytz
 import json
-from DB_src.db_manager import SQLManager
+from DB_src.db_manager import DatabaseManagement
 
 
 class RedditMonitor:
     def __init__(self):
         self.credentials = self.get_creds()
-        self.subdirectories = ["POST/", "WORDS/"]
         self.reddit = praw.Reddit(
             client_id=self.credentials[0],
             client_secret=self.credentials[1],
@@ -42,11 +41,10 @@ class RedditMonitor:
             return {}
 
     def fetch_posts(self):
-        for db_id, sub_name_list in self.subreddits.items():
+        for db_name, sub_name_list in self.subreddits.items():
             for sub_name in sub_name_list:
                 subreddit = self.reddit.subreddit(sub_name)
                 print(f"{self.get_time()} [ GETTING DATA FROM r/{sub_name} ]")
-
                 after = None
                 fetch = True
 
@@ -54,7 +52,6 @@ class RedditMonitor:
                     new_posts = list(subreddit.new(limit=100, params={"after": after}))
                     if not new_posts:
                         print(f"{self.get_time()} [ No more posts available. Stopping. ]")
-                        fetch = False
                         break
 
                     for submission in new_posts:
@@ -68,28 +65,11 @@ class RedditMonitor:
                             break
 
                         post_id = submission.id
+                        data = (submission.title, submission.selftext, submission.score,
+                                submission.num_comments, submission.upvote_ratio, date_post, sub_name)
+                        if submission.num_comments < 40 or submission.upvote_ratio < 0.8 or submission.score < 100:
+                            continue
 
-                        if not SQLManager(f'FILTER/{db_id}', post_id, '').check_post_processed():
-                            SQLManager(f'FILTER/{db_id}', post_id, '').store_filter()
-
-                            data = {
-                                "title": submission.title,
-                                "description": submission.selftext,
-                                "score": submission.score,
-                                "num_comments": submission.num_comments,
-                                "upvote_ratio": submission.upvote_ratio,
-                                "timestamp": submission.created_utc,
-                                "date": date_post,
-                                "subreddit_name": sub_name
-                            }
-                            print(f'{self.get_time()} [ ADDING {post_id} ]')
-
-                            for subdirectory in self.subdirectories:
-                                SQLManager(db_id, post_id, subdirectory, data).update_db()
-
-                        else:
-                            print(f"[ POST {post_id} ALREADY IN THE DATABASE ]")
-                            fetch = False
-                            break
+                        DatabaseManagement(db_name, data, post_id).update_db()
                     after = new_posts[-1].fullname
 

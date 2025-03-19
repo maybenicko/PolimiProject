@@ -95,8 +95,10 @@ def create_nft_image(nft_traits, output_path="generated_nft.png"):
         for layer in layers[1:]:
             base_image.paste(layer, (0, 0), layer)
         base_image.save(output_path)
+        return True
     else:
         print("No valid layers found to generate image.")
+        return False
 
 
 def create_metadata(nft_traits, index):
@@ -126,10 +128,12 @@ def create_metadata(nft_traits, index):
 def generate_nfts(count=10):
     for i in range(count):
         nft_traits = generate_nft()
-        image_path = os.path.join(output_images_path, f"BART #{str(i+1).zfill(4)}.png")
-        create_nft_image(nft_traits, image_path)
+        image_name = f"BART #{str(i+1).zfill(4)}.png"
+        image_path = os.path.join(output_images_path, image_name)
+        if not create_nft_image(nft_traits, image_path):
+            continue
         create_metadata(nft_traits, i)
         print(f"[ Generated NFT {i} ]")
 
 
-generate_nfts(1111)
+generate_nfts(1)
