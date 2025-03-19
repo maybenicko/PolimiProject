@@ -1,13 +1,13 @@
 import sqlite3
 import time
 from datetime import datetime, timedelta
-from post_ranking import ranked
-from coin_options_db import MemecoinGenerator
+from DB_src.post_ranking import ranked
+from DB_src.coin_options_db import MemecoinGenerator
 
 
 # data = (title, selftext, score, num_comments, upvote_ratio, date_post, sub_name)
 class DatabaseManagement:
-    def __init__(self, db_name, data=None, post_id=None):
+    def __init__(self, db_name=None, data=None, post_id=None):
         self.db_name = db_name
         self.directories = ['Crypto', 'Politics', 'Activity']
         self.data = data
@@ -80,7 +80,7 @@ class DatabaseManagement:
 
     def generate_top(self):
         for db_name in self.directories:
-            directory = 'DB/' + db_name + '.db'
+            directory = 'DB_src/DB/' + db_name + '.db'
             with sqlite3.connect(directory) as conn:
                 cursor = conn.cursor()
 
@@ -118,7 +118,7 @@ class DatabaseManagement:
         for item_tuple in top:
             post_id_latest.append(item_tuple[0])
 
-        directory = 'DB/TOP/' + db_name + '.db'
+        directory = 'DB_src/DB/TOP/' + db_name + '.db'
 
         post_id_old = []
         with sqlite3.connect(directory) as conn:
@@ -142,7 +142,7 @@ class DatabaseManagement:
             if post not in keep_post_id:
                 remove_post_id.append(post)
 
-        directory = 'DB/TOP/' + db_name + '.db'
+        directory = 'DB_src/DB/TOP/' + db_name + '.db'
         with sqlite3.connect(directory) as conn:
             cursor = conn.cursor()
 
@@ -166,7 +166,3 @@ class DatabaseManagement:
                         WHERE post_id = ?;
                     ''', (post_id,))
                 conn.commit()
-
-
-bot = DatabaseManagement('')
-bot.generate_top()

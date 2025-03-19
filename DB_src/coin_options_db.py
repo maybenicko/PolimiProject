@@ -5,7 +5,7 @@ import re
 
 class MemecoinGenerator:
     def __init__(self, post_text, subreddit_name):
-        with open('creds.json', 'r') as file:
+        with open('DB_src/creds.json', 'r') as file:
             data = json.load(file)
         self.openai_api_key = data['openai_api']
         self.pinata_api_key = data['pinata_api']
